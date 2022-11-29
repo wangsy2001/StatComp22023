@@ -1,0 +1,91 @@
+---
+title: "project"
+author: '22023'
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Project}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+library(StatComp22023)
+data(data)
+```
+
+# function 1: prototype-based cluster
+
+Use function `cluster.prototype` to implement K-means and K-median clustering algorithm.
+
+Firstly, the K-means algorithm
+```{r}
+x <- iris[1:100,]
+result <- cluster.prototype(x[1:4], K=2)
+x['cluster'] = result[[1]]
+```
+
+The center of each cluster
+```{r}
+result[[2]]
+```
+
+To test the accuracy, plot the dimensionality reduction plot of the first two principal components, which the text represents the annotation of the dataset, and the color is the clustering result. It's easy to see they are consistent.
+```{r}
+pca_iris = princomp(x[,1:4])$scores[,1:2]
+plot(pca_iris, t='n')
+text(pca_iris, labels=x$Species,col=x$cluster) 
+```
+
+
+Secondly, the K-medains algorithm
+
+```{r}
+x <- iris[(iris$Species == 'setosa') | (iris$Species == 'versicolor'),]
+result <- cluster.prototype(x[1:4], K=2, method='median')
+x['cluster'] = result[[1]]
+pca_iris = princomp(x[,1:4])$scores[,1:2]
+plot(pca_iris, t='n')
+text(pca_iris, labels=x$Species,col=x$cluster) 
+```
+
+The center of each cluster
+```{r}
+result[[2]]
+```
+
+
+# function 2: Hierarchical Clustering
+
+Use function `cluster.hierarchical` to implement hierarchical Clustering algorithm.
+
+```{r}
+x <- iris[1:100,]
+label = cluster.hierarchical(x[,1:4], K=2,method='mean')
+```
+
+To test the accuracy, plot the dimensionality reduction plot of the first two principal components, which the text represents the annotation of the dataset, and the color is the clustering result. It's easy to see they are consistent.
+```{r}
+x['cluster'] = label
+pca_iris = princomp(x[,1:4])$scores[,1:2]
+plot(pca_iris, t='n')
+text(pca_iris, labels=x$Species,col=x$cluster)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
